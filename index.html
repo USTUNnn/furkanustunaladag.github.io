@@ -3,206 +3,186 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Üstün Aladağ | Elektrik-Elektronik Mühendisi</title>
+    <title>Furkan Üstün Aladağ | Premium Portfolio</title>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+
     <style>
-        /* Modern, Koyu ve Minimalist Temel Tasarım (Jesko Jets Tarzı) */
-        * { box-sizing: border-box; }
+        /* Standart fare okunu gizliyoruz, kendi imlecimizi kullanacağız */
+        * { box-sizing: border-box; cursor: none !important; }
+        
         body { 
             margin: 0; 
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-            background: #070707; /* Derin siyah/gri */
+            background: #050505; /* Daha derin, premium bir siyah */
             color: #f5f5f5; 
             overflow-x: hidden; 
         }
+
+        /* Özel İmleç Tasarımı */
+        .custom-cursor {
+            position: fixed;
+            top: 0; left: 0;
+            width: 12px; height: 12px;
+            background-color: #fff;
+            border-radius: 50%;
+            pointer-events: none; /* Tıklamaları engellememesi için */
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+            mix-blend-mode: difference; /* Beyaz arka planda siyaha döner */
+        }
         
-        /* Hero Section (Karşılama Ekranı) */
+        /* Arka Plana Endüstriyel Noise (Kumlanma) Efekti */
+        .noise-bg {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* Hero Section */
         .hero { 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            text-align: center; 
-            padding: 0 5vw;
+            height: 100vh; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; 
+            text-align: center; padding: 0 5vw;
         }
-        h1 { 
-            font-size: 6vw; 
-            text-transform: uppercase; 
-            letter-spacing: 4px; 
-            margin: 0; 
-            font-weight: 300; 
-        }
-        .subtitle { 
-            font-size: 1.5vw; 
-            color: #888; 
-            margin-top: 2vh; 
-            font-weight: 300; 
-            letter-spacing: 2px; 
-        }
+        h1 { font-size: 6.5vw; text-transform: uppercase; letter-spacing: 5px; margin: 0; font-weight: 200; }
+        .subtitle { font-size: 1.2vw; color: #777; margin-top: 3vh; font-weight: 300; letter-spacing: 3px; text-transform: uppercase; }
         
-        /* Genel Bölüm Yapısı */
-        .section { 
-            padding: 15vh 10vw; 
-            min-height: 80vh; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-        }
-        h2 { 
-            font-size: 3.5vw; 
-            font-weight: 300; 
-            margin-bottom: 8vh; 
-            border-bottom: 1px solid #222; 
-            padding-bottom: 2vh;
-            color: #fff;
-        }
+        .section { padding: 15vh 10vw; min-height: 80vh; display: flex; flex-direction: column; justify-content: center; }
+        h2 { font-size: 4vw; font-weight: 200; margin-bottom: 8vh; padding-bottom: 2vh; border-bottom: 1px solid rgba(255,255,255,0.1); }
         
-        /* Proje Listesi */
+        /* Paralaks Görsel Alanı Örneği */
+        .image-container {
+            width: 100%; height: 60vh; overflow: hidden;
+            margin-bottom: 10vh; border-radius: 4px;
+            position: relative;
+        }
+        .parallax-image {
+            width: 100%; height: 130%; /* Taşkın veriyoruz ki kayacak yer olsun */
+            background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80'); /* Örnek Elektronik Görseli */
+            background-size: cover; background-position: center;
+            position: absolute; top: -15%; left: 0;
+        }
+
+        /* Proje Listesi - Daha Etkileşimli */
         .project-card { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #1a1a1a; 
-            padding: 5vh 0; 
-            opacity: 0; /* JS ile görünür olacak */
-            transform: translateY(50px); 
-            transition: border-color 0.3s ease;
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5vh 0; 
+            opacity: 0; transform: translateY(40px); 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .project-card:hover {
-            border-bottom: 1px solid #fff;
-            cursor: pointer;
-        }
-        .project-title { 
-            font-size: 2vw; 
-            font-weight: 400; 
-            max-width: 60%;
-        }
-        .project-tech { 
-            font-size: 1.1vw; 
-            color: #777; 
-            text-align: right;
-            font-weight: 300;
-        }
+        .project-card:hover { border-bottom: 1px solid #fff; transform: translateX(10px) !important; }
+        .project-title { font-size: 2.2vw; font-weight: 300; }
+        .project-tech { font-size: 1vw; color: #666; font-weight: 300; letter-spacing: 1px; text-transform: uppercase;}
         
-        /* İletişim / Footer */
-        .contact { 
-            text-align: center; 
-            padding-bottom: 15vh; 
-            margin-top: 5vh;
-        }
-        .contact p {
-            font-size: 1.5vw;
-            color: #888;
-            margin-bottom: 6vh;
-            font-weight: 300;
-        }
+        /* İletişim Butonu */
+        .contact { text-align: center; padding-bottom: 15vh; }
         .contact-btn { 
-            color: #070707; 
-            background: #fff;
-            text-decoration: none; 
-            font-size: 1.2vw; 
-            padding: 2vh 4vw; 
-            border-radius: 50px; 
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 500;
-            transition: all 0.4s ease; 
+            display: inline-block; color: #050505; background: #fff; text-decoration: none; 
+            font-size: 1vw; padding: 2vh 4vw; border-radius: 50px; text-transform: uppercase; letter-spacing: 2px;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
         }
-        .contact-btn:hover { 
-            background: #ccc; 
-            transform: scale(1.05);
-        }
+        .contact-btn:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
 
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="noise-bg"></div>
+
     <section class="hero">
         <h1 class="hero-text">Furkan Üstün Aladağ</h1>
-        <div class="subtitle hero-text">Elektrik-Elektronik Mühendisi • Gömülü Yazılım & PCB Tasarım</div>
+        <div class="subtitle hero-text">Donanım Mühendisliği & Sistem Tasarımı</div>
     </section>
 
     <section class="section" id="about">
-        <h2 class="fade-up">Hakkımda</h2>
-        <p class="fade-up" style="font-size: 1.8vw; line-height: 1.6; color: #aaa; max-width: 80%; font-weight: 300;">
-            Donanım ve yazılımın kesiştiği noktada yenilikçi çözümler üretiyorum. Mikrodenetleyiciler, endüstriyel otomasyon sistemleri ve donanım geliştirme süreçlerinde derinleşerek uçtan uca sistemler tasarlıyorum.
+        <h2 class="fade-up">Felsefe</h2>
+        
+        <div class="image-container fade-up">
+            <div class="parallax-image"></div>
+        </div>
+
+        <p class="fade-up" style="font-size: 2vw; line-height: 1.5; color: #999; max-width: 85%; font-weight: 300;">
+            Sadece kod yazmıyor veya devre çizmiyorum; fiziksel dünya ile dijital dünya arasında pürüzsüz çalışan, stabil ve yenilikçi köprüler inşa ediyorum.
         </p>
     </section>
 
     <section class="section" id="projects">
-        <h2 class="fade-up">Projeler & Deneyimler</h2>
+        <h2 class="fade-up">Seçili Çalışmalar</h2>
         
-        <div class="project-card">
-            <div class="project-title">Tersine Mühendislik & Firmware Geliştirme</div>
-            <div class="project-tech">Ghidra, MPLAB X, PIC Assembly, HDC1080</div>
+        <div class="project-card interactive">
+            <div class="project-title">Tersine Mühendislik: Firmware Patching</div>
+            <div class="project-tech">Ghidra • MPLAB X • Assembly</div>
         </div>
         
-        <div class="project-card">
-            <div class="project-title">Akıllı Garaj Lazer Tespit Sistemi</div>
-            <div class="project-tech">ESP32, C++, Google Home Entegrasyonu</div>
+        <div class="project-card interactive">
+            <div class="project-title">Lazer Tabanlı Akıllı Tespit Ağı</div>
+            <div class="project-tech">ESP32 • C++ • IoT</div>
         </div>
         
-        <div class="project-card">
-            <div class="project-title">Endüstriyel Otomasyon & HMI Entegrasyonu</div>
-            <div class="project-tech">Siemens LOGO!, S7-1200, TIA Portal, Beijer HMI</div>
-        </div>
-
-        <div class="project-card">
-            <div class="project-title">Özel Tasarım 18650 Güç Ünitesi & Kablosuz Şarj</div>
-            <div class="project-tech">Devre Tasarımı, Altium, 3D Baskı (CAD)</div>
+        <div class="project-card interactive">
+            <div class="project-title">Özel Üretim Güç Modülü & 3D Kasa</div>
+            <div class="project-tech">Altium • CAD • Li-ion Teknolojisi</div>
         </div>
     </section>
 
     <section class="section contact">
-        <h2 class="fade-up">İletişim</h2>
-        <p class="fade-up">Manisa bölgesindeki donanım tasarımı ve gömülü yazılım fırsatları için benimle iletişime geçebilirsiniz.</p>
-        <div class="fade-up" style="margin-top: 4vh;">
-            <a href="mailto:info@ornek.com" class="contact-btn">Bana Ulaşın</a>
+        <h2 class="fade-up">Bağlantı Kur</h2>
+        <div class="fade-up" style="margin-top: 6vh;">
+            <a href="mailto:info@ornek.com" class="contact-btn interactive">Mesaj Gönder</a>
         </div>
     </section>
 
     <script>
-        // GSAP ScrollTrigger Eklentisini Aktifleştirme
+        // 1. LENIS SMOOTH SCROLL KURULUMU
+        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), direction: 'vertical', gestureDirection: 'vertical', smooth: true, mouseMultiplier: 1, smoothTouch: false });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+
+        // 2. ÖZEL İMLEÇ (CUSTOM CURSOR) MANTIĞI
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
+        });
+
+        // Etkileşimli alanların üzerine gelince imleci büyütme
+        const interactives = document.querySelectorAll('.interactive');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => { gsap.to(cursor, { scale: 3, backgroundColor: 'rgba(255,255,255,0.5)', duration: 0.3 }); });
+            el.addEventListener('mouseleave', () => { gsap.to(cursor, { scale: 1, backgroundColor: '#fff', duration: 0.3 }); });
+        });
+
+        // 3. GSAP ANIMASYONLARI
         gsap.registerPlugin(ScrollTrigger);
+        
+        // Lenis ve ScrollTrigger'ı senkronize etme
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => { lenis.raf(time * 1000) });
+        gsap.ticker.lagSmoothing(0);
 
-        // Sayfa Yüklendiğinde Hero Kısmı Animasyonu
-        gsap.from(".hero-text", { 
-            duration: 1.5, 
-            y: 80, 
-            opacity: 0, 
-            stagger: 0.3, 
-            ease: "power4.out", 
-            delay: 0.2 
+        // Hero Animasyonu
+        gsap.from(".hero-text", { duration: 1.8, y: 100, opacity: 0, stagger: 0.2, ease: "expo.out", delay: 0.5 });
+
+        // Paralaks Efekti
+        gsap.to(".parallax-image", {
+            yPercent: 30, // Kaydırdıkça görsel aşağı doğru hafifçe kayar
+            ease: "none",
+            scrollTrigger: { trigger: ".image-container", start: "top bottom", end: "bottom top", scrub: true }
         });
 
-        // Aşağı Kaydırdıkça Projelerin Belirmesi (Fade-up)
+        // Proje Kartları Animasyonu
         gsap.utils.toArray('.project-card').forEach(card => {
-            gsap.to(card, {
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 85%", // Öğe ekranın %85'ine geldiğinde başla
-                    toggleActions: "play none none reverse"
-                },
-                y: 0,
-                opacity: 1,
-                duration: 1.2,
-                ease: "power3.out"
-            });
+            gsap.to(card, { scrollTrigger: { trigger: card, start: "top 90%" }, y: 0, opacity: 1, duration: 1, ease: "power3.out" });
         });
 
-        // Genel Fade-up Sınıfı Animasyonları
+        // Genel Fade-up Elementleri
         gsap.utils.toArray('.fade-up').forEach(elem => {
-            gsap.from(elem, {
-                scrollTrigger: {
-                    trigger: elem,
-                    start: "top 90%",
-                },
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                ease: "power2.out"
-            });
+            gsap.from(elem, { scrollTrigger: { trigger: elem, start: "top 85%" }, y: 60, opacity: 0, duration: 1.2, ease: "expo.out" });
         });
     </script>
 </body>
