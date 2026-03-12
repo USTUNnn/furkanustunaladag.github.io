@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Furkan Üstün Aladağ | Modern Portfolio</title>
+    <title>Furkan Üstün Aladağ | Premium Portfolio</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -12,46 +12,59 @@
     <style>
         /* Modern CSS Sıfırlama ve Değişkenler */
         :root {
-            --bg-color: #F5F5F7; /* Apple stili açık gri arka plan */
             --text-main: #1D1D1F;
             --text-muted: #86868B;
-            --card-bg: rgba(255, 255, 255, 0.7);
-            --accent-color: #0071E3; /* Apple Mavisi */
+            --card-bg: rgba(255, 255, 255, 0.4); /* Arka planın görünmesi için daha saydam */
+            --accent-color: #0071E3;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* Masaüstünde özel imleç, mobilde normal davranış */
+        /* Masaüstünde özel imleç, mobilde normal */
         @media (hover: hover) and (pointer: fine) {
             * { cursor: none !important; }
         }
 
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background-color: var(--bg-color); 
             color: var(--text-main); 
             overflow-x: hidden; 
             -webkit-font-smoothing: antialiased;
+            background: #fff; /* Temel, saydamlığın çalışması için */
         }
 
-        /* Özel İmleç Tasarımı (Koyu ve Şeffaf) */
+        /* Özel İmleç Tasarımı (Mix-blend-mode ile) */
         .custom-cursor {
             position: fixed; top: 0; left: 0; width: 16px; height: 16px;
-            background-color: rgba(29, 29, 31, 0.3);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            transform: translate(-50%, -50%); backdrop-filter: blur(2px);
+            background-color: #fff; border-radius: 50%; pointer-events: none; z-index: 9999;
+            transform: translate(-50%, -50%); mix-blend-mode: difference;
             transition: width 0.3s, height 0.3s, background-color 0.3s;
         }
-        /* Mobilde özel imleci gizle */
         @media (hover: none) and (pointer: coarse) { .custom-cursor { display: none; } }
 
-        /* Arka Planda Tatlı Renk Geçişleri (Glow Efekti) */
-        .ambient-glow {
-            position: fixed; width: 60vw; height: 60vw;
-            background: radial-gradient(circle, rgba(0,113,227,0.08) 0%, rgba(255,255,255,0) 70%);
-            top: -20vh; left: -10vw; border-radius: 50%; z-index: -1; pointer-events: none;
+        /* Arka Planda Tatlı ve İnteraktif Difüze Işık Hüzmeleri */
+        .background-effects {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -2; pointer-events: none; overflow: hidden;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* Temel 'sweet' renk */
         }
-        .ambient-glow.right { left: auto; right: -10vw; top: 40vh; background: radial-gradient(circle, rgba(142,68,173,0.05) 0%, rgba(255,255,255,0) 70%); }
+        .ambient-glow {
+            position: absolute; width: 60vw; height: 60vw;
+            border-radius: 50%; opacity: 0.3; filter: blur(100px);
+            mix-blend-mode: color-dodge; /* Işığı yaymak için */
+        }
+        .ambient-glow.top-left { 
+            background: radial-gradient(circle, rgba(255, 183, 178, 0.6) 0%, rgba(255,255,255,0) 70%); /* Şeftali */
+            top: -20vh; left: -10vw; 
+        }
+        .ambient-glow.center-right { 
+            background: radial-gradient(circle, rgba(178, 235, 242, 0.6) 0%, rgba(255,255,255,0) 70%); /* Nane */
+            top: 40vh; right: -10vw; 
+        }
+        .ambient-glow.bottom-left { 
+            background: radial-gradient(circle, rgba(224, 187, 228, 0.5) 0%, rgba(255,255,255,0) 70%); /* Lavanta */
+            bottom: -20vh; left: 10vw; 
+        }
 
         /* Ortak Konteyner */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 5%; }
@@ -64,29 +77,31 @@
         .hero-badge {
             background: rgba(0, 113, 227, 0.1); color: var(--accent-color);
             padding: 8px 20px; border-radius: 30px; font-size: 0.9rem;
-            font-weight: 600; margin-bottom: 3vh; display: inline-block;
+            font-weight: 600; margin-bottom: 2vh; display: inline-block;
         }
-        h1 { font-size: clamp(3rem, 6vw, 5rem); font-weight: 700; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 2vh;}
-        .subtitle { font-size: clamp(1.2rem, 2vw, 1.8rem); color: var(--text-muted); font-weight: 400; max-width: 600px; }
+        h1 { font-size: clamp(3.5rem, 8vw, 6.5rem); font-weight: 700; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 1vh; color: var(--text-main); }
+        h2 { font-size: clamp(1.2rem, 2.5vw, 2.2rem); font-weight: 500; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 2vh; color: var(--text-muted); }
+        .subtitle { font-size: clamp(1rem, 1.5vw, 1.2rem); color: var(--text-muted); font-weight: 400; max-width: 600px; }
         
         .section { padding: 12vh 0; }
-        h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; text-align: center; margin-bottom: 8vh; letter-spacing: -0.5px; }
+        .section-header { font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; text-align: center; margin-bottom: 8vh; letter-spacing: -0.5px; }
 
-        /* Apple/Tesla Tarzı Glassmorphism Kartlar */
+        /* Apple/Tesla Tarzı Glassmorphism Kartlar (Daha Saydam) */
         .projects-grid {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;
         }
         .card { 
-            background: var(--card-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.5); border-radius: 30px;
-            padding: 40px 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            background: var(--card-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 30px;
+            padding: 40px 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.02);
             opacity: 0; transform: translateY(40px); 
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex; flex-direction: column; justify-content: space-between;
         }
         .card:hover { 
-            transform: translateY(-10px) scale(1.02) !important; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.08); 
+            transform: translateY(-8px) scale(1.01) !important; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.06); 
+            background: rgba(255,255,255,0.6);
         }
         .card-icon {
             width: 60px; height: 60px; background: #fff; border-radius: 50%;
@@ -102,16 +117,17 @@
             display: inline-block; color: #fff; background: var(--text-main); 
             text-decoration: none; font-size: 1.1rem; font-weight: 500;
             padding: 18px 40px; border-radius: 50px; 
-            box-shadow: 0 10px 20px rgba(29, 29, 31, 0.2);
+            box-shadow: 0 10px 20px rgba(29, 29, 31, 0.15);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
         }
-        .contact-btn:hover { transform: scale(1.05); background: var(--accent-color); box-shadow: 0 15px 30px rgba(0, 113, 227, 0.3); }
+        .contact-btn:hover { transform: scale(1.03); background: var(--accent-color); box-shadow: 0 15px 30px rgba(0, 113, 227, 0.2); }
 
         /* Mobil Uyumlu Düzenlemeler */
         @media (max-width: 768px) {
             .section { padding: 8vh 0; }
             .card { padding: 30px 20px; border-radius: 24px; }
             .hero { padding-top: 5vh; }
+            .background-effects .ambient-glow { width: 90vw; height: 90vw; opacity: 0.2; }
         }
     </style>
 </head>
@@ -119,18 +135,22 @@
 
     <div class="custom-cursor" id="cursor"></div>
     
-    <div class="ambient-glow"></div>
-    <div class="ambient-glow right"></div>
+    <div class="background-effects">
+        <div class="ambient-glow top-left"></div>
+        <div class="ambient-glow center-right"></div>
+        <div class="ambient-glow bottom-left"></div>
+    </div>
 
     <div class="container">
         <section class="hero">
             <div class="hero-badge hero-text">Mühendis & Tasarımcı</div>
-            <h1 class="hero-text">Donanımı Zekayla<br>Buluşturuyorum.</h1>
+            <h1 class="hero-text">Furkan Üstün Aladağ</h1>
+            <h2 class="hero-text">Donanımı Zekayla Buluşturuyorum.</h2>
             <div class="subtitle hero-text">Gömülü sistemler ve PCB tasarımı ile fiziksel dünyaya hayat veriyorum.</div>
         </section>
 
         <section class="section" id="projects">
-            <h2 class="fade-up">Seçili Projeler</h2>
+            <h2 class="section-header fade-up">Seçili Projeler</h2>
             
             <div class="projects-grid">
                 <div class="card interactive">
@@ -168,7 +188,7 @@
         </section>
 
         <section class="section contact">
-            <h2 class="fade-up">Birlikte Çalışalım</h2>
+            <h2 class="section-header fade-up">Birlikte Çalışalım</h2>
             <p class="fade-up" style="color: var(--text-muted); font-size: 1.2rem; margin-bottom: 4vh; max-width: 500px; margin-left: auto; margin-right: auto;">
                 Yeni nesil donanım projeleriniz veya gömülü sistem ihtiyaçlarınız için iletişime geçin.
             </p>
@@ -181,62 +201,65 @@
     <script>
         // 1. LENIS SMOOTH SCROLL (Yağ gibi kaydırma)
         const lenis = new Lenis({ 
-            duration: 1.2, 
+            duration: 1.4, // Biraz daha yumuşak akış
             easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), 
             smooth: true,
-            smoothTouch: false // Mobilde kendi doğal kaydırmasını kullansın
+            smoothTouch: false
         });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 2. ÖZEL İMLEÇ MANTIĞI (Sadece masaüstü için)
+        // 2. ÖZEL İMLEÇ MANTIĞI
         const cursor = document.getElementById('cursor');
-        
-        // Cihazın dokunmatik olup olmadığını kontrol et
-        const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+        const isTouchDevice = (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
 
         if (!isTouchDevice) {
             document.addEventListener('mousemove', (e) => {
-                gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.15, ease: "power2.out" });
+                gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1, ease: "power2.out" });
             });
 
-            // Kartların veya butonların üzerine gelince imleç büyüsün
+            // Etkileşimli alanlar
             const interactives = document.querySelectorAll('.interactive');
             interactives.forEach(el => {
                 el.addEventListener('mouseenter', () => { 
-                    gsap.to(cursor, { scale: 3.5, backgroundColor: 'rgba(0, 113, 227, 0.15)', duration: 0.3 }); 
+                    gsap.to(cursor, { scale: 3, duration: 0.3 }); 
                 });
                 el.addEventListener('mouseleave', () => { 
-                    gsap.to(cursor, { scale: 1, backgroundColor: 'rgba(29, 29, 31, 0.3)', duration: 0.3 }); 
+                    gsap.to(cursor, { scale: 1, duration: 0.3 }); 
                 });
             });
         }
 
-        // 3. GSAP ANIMASYONLARI
+        // 3. GSAP ANIMASYONLARI & ARKA PLAN MANTIĞI
         gsap.registerPlugin(ScrollTrigger);
         lenis.on('scroll', ScrollTrigger.update);
         gsap.ticker.add((time) => { lenis.raf(time * 1000) });
         gsap.ticker.lagSmoothing(0);
 
-        // Hero Animasyonu (Yukarıdan yavaşça inen yumuşak metinler)
+        // Arka Plan Işıklarının Yavaş Hareketi (Sürekli)
+        gsap.to(".ambient-glow.top-left", { yPercent: 20, xPercent: 10, repeat: -1, yoyo: true, duration: 15, ease: "sine.inOut" });
+        gsap.to(".ambient-glow.center-right", { yPercent: -15, xPercent: -10, repeat: -1, yoyo: true, duration: 18, ease: "sine.inOut", delay: 1 });
+        gsap.to(".ambient-glow.bottom-left", { yPercent: 10, xPercent: 15, repeat: -1, yoyo: true, duration: 20, ease: "sine.inOut", delay: 2 });
+
+        // Hero Animasyonu
         gsap.from(".hero-text", { 
-            duration: 1.5, y: 50, opacity: 0, stagger: 0.2, ease: "power4.out", delay: 0.2 
+            duration: 1.8, y: 70, opacity: 0, stagger: 0.25, ease: "expo.out", delay: 0.3 
         });
 
-        // Kartların Ekranın İçine Girme Animasyonu
+        // Kartların Giriş Animasyonu
         gsap.utils.toArray('.card').forEach((card, i) => {
             gsap.to(card, { 
-                scrollTrigger: { trigger: card, start: "top 85%" }, 
-                y: 0, opacity: 1, duration: 1, ease: "back.out(1.2)", 
-                delay: i * 0.1 // Yan yana olan kartlar sırayla gelsin diye
+                scrollTrigger: { trigger: card, start: "top 90%" }, 
+                y: 0, opacity: 1, duration: 1.2, ease: "power4.out", 
+                delay: i * 0.15 
             });
         });
 
-        // Genel Aşağıdan Yukarı Gelen Elementler (Başlıklar vb.)
+        // Genel Fade-up
         gsap.utils.toArray('.fade-up').forEach(elem => {
             gsap.from(elem, { 
-                scrollTrigger: { trigger: elem, start: "top 85%" }, 
-                y: 40, opacity: 0, duration: 1, ease: "power3.out" 
+                scrollTrigger: { trigger: elem, start: "top 90%" }, 
+                y: 50, opacity: 0, duration: 1, ease: "power3.out" 
             });
         });
     </script>
